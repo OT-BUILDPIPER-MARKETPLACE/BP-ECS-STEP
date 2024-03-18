@@ -5,7 +5,8 @@ source /app/buildpiper/shell-functions/str-functions.sh
 source /app/buildpiper/shell-functions/file-functions.sh
 source /app/buildpiper/shell-functions/aws-functions.sh
 
-
+bp_image_uri=$(getComponentName)
+bp_image_tag=$(getRepositoryTag)
 
 # Extract ${BP_IMAGE_URI} and ${BP_IMAGE_TAG} using jq
 bp_image_uri=$(echo "$json_data" | jq -r '.addition_meta_data.placeholders[] | select(.key == "${BP_IMAGE_URI}") | .value')
