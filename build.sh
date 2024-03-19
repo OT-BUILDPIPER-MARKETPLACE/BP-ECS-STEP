@@ -11,8 +11,6 @@ git_url=$(getGitUrl)
 
 repo_name=$(basename "$git_url" | sed 's/\.git$//')
 
-repo_name=$(basename "$git_url" | sed 's/\.git$//')
-
 echo "BP_IMAGE_URI: $bp_image_uri"
 echo "BP_IMAGE_TAG: $bp_image_tag"
 echo "Repository Name: $repo_name"
