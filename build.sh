@@ -4,10 +4,9 @@ source /opt/buildpiper/shell-functions/log-functions.sh
 source /opt/buildpiper/shell-functions/str-functions.sh
 source /opt/buildpiper/shell-functions/file-functions.sh
 source /opt/buildpiper/shell-functions/aws-functions.sh
-CODEBASE_LOCATION="${WORKSPACE}"/"${CODEBASE_DIR}"
-logInfoMessage "I'll do processing at [$CODEBASE_LOCATION]"
+
 sleep  $SLEEP_DURATION
-cd  "${CODEBASE_LOCATION}"
+
 if [ "$DEBUG" = true ]; then
   set -x
 fi
