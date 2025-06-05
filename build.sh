@@ -60,10 +60,10 @@ if [[ "$OPERATION" == "Stop" || "$OPERATION" == "Start" ]]; then
       --desired-count "$DESIRED_COUNT" >/dev/null
 
     if [[ $? -ne 0 ]]; then
-      echo "   ❌ Failed to update $SERVICE_NAME task count to $DESIRED_COUNT"
+      echo "❌ Failed to update $SERVICE_NAME task count to $DESIRED_COUNT"
       exit 1
     else
-      echo "   ✅ Successfully updated $SERVICE_NAME task count to $DESIRED_COUNT"
+      echo "✅ Successfully updated $SERVICE_NAME task count to $DESIRED_COUNT"
     fi
   done
 
