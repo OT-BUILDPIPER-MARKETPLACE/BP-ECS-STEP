@@ -23,7 +23,7 @@ DEPLOY_ENV_FILE="./deploy.env"
 
 setupAwsCredentials() {
 
-    echo "=== Setting up AWS credentials ==="
+    logInfoMessage "=== Setting up AWS credentials ==="
 
     if [ "${ASSUME_ROLE:-false}" == "true" ]; then
 
@@ -128,6 +128,14 @@ for SERVICE in "${SERVICE_LIST[@]}"; do
 	fi
 
     logInfoMessage "=========================================="
+    logInfoMessage
+    logInfoMessage "Deployment started: $SERVICE"
+    logInfoMessage 
+    logInfoMessage "=========================================="
+
+    logInfoMessage "=========================================="
+
+    logInfoMessage "=========================================="
     logInfoMessage "Checking service: $SERVICE"
     logInfoMessage "Expected variable: $TASK_DEF_VAR"
     logInfoMessage "=========================================="
@@ -144,7 +152,6 @@ for SERVICE in "${SERVICE_LIST[@]}"; do
   
     logInfoMessage "Task Definition ARN found:"
     logInfoMessage "$TASK_DEF_ARN"
-    logInfoMessage
 
   logInfoMessage "=========================================="
   logInfoMessage "Deploying service : ${SERVICE}"
@@ -195,11 +202,11 @@ for SERVICE in "${SERVICE_LIST[@]}"; do
     fi
 
 done
+
+logInfoMessage "All services validated successfully."
 TASK_STATUS=$?
 
 saveTaskStatus ${TASK_STATUS} ${ACTIVITY_SUB_TASK_CODE}
-
-logInfoMessage "All services validated successfully."
 echo "DEPLOYMENT_STATUS=SUCCESS" > deployment.env
 }
 
