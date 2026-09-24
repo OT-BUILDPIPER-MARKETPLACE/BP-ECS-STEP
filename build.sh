@@ -10,9 +10,15 @@ if [ "$DEBUG" = true ]; then
   set -x
 fi
 
+logInfoMessage "Current directory: $PWD"
+logInfoMessage "Workspace: $WORKSPACE"
+logInfoMessage "Codebase directory: $CODEBASE_DIR"
+
 #CODEBASE_LOCATION="${WORKSPACE}"/"${CODEBASE_DIR}"
 logInfoMessage "I'll do processing at [$CODEBASE_LOCATION]"
 sleep  $SLEEP_DURATION
+
+#cd  "${CODEBASE_LOCATION}"
 
 cd  "${CODEBASE_LOCATION}"
 
