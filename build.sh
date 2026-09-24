@@ -192,15 +192,12 @@ for SERVICE in "${SERVICE_LIST[@]}"; do
                 --services "${SERVICE}" \
                 --query 'services[0].events[0:15].[createdAt,message]' \
                 --output table
-
+			echo "DEPLOYMENT_STATUS=FAILED" > deployment.env
             exit 1
         fi
-
         logInfoMessage "Service stable: ${SERVICE}"
-
     else
         logWarningMessage "WAIT is not set to 'true', skipping wait for service stability"
-
     fi
 
 done
@@ -209,6 +206,7 @@ TASK_STATUS=$?
 saveTaskStatus ${TASK_STATUS} ${ACTIVITY_SUB_TASK_CODE}
 
 logInfoMessage "All services validated successfully."
+echo "DEPLOYMENT_STATUS=SUCCESS" > deployment.env
 }
 
 
@@ -285,14 +283,19 @@ deploycronServices (){
 		]
 	' "${CURRENT_TARGETS_FILE}" > "${UPDATED_TARGETS_FILE}"
 
-	aws events put-targets \
-		--rule "${RULE}" \
-		--targets "file://${UPDATED_TARGETS_FILE}" > /dev/null
+        if ! aws events put-targets \
+            --rule "${RULE}" \
+            --targets "file://${UPDATED_TARGETS_FILE}" \
+            > /dev/null; then
 
-	logInfoMessage "update-scheduler PASSED: ${RULE}"
+            logErrorMessage "Failed to update EventBridge targets for rule: ${RULE}"
 
+            echo "CRON_DEPLOYMENT_STATUS=FAILED" > cron-deployment.env
+            exit 1
+        fi
+		logInfoMessage "update-scheduler PASSED: ${RULE}"
 	done
-
+	echo "CRON_DEPLOYMENT_STATUS=SUCCESS" > cron-deployment.env	
 	TASK_STATUS=$?
 
 	saveTaskStatus ${TASK_STATUS} ${ACTIVITY_SUB_TASK_CODE}
