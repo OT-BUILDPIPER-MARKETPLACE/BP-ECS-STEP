@@ -10,10 +10,6 @@ if [ "$DEBUG" = true ]; then
   set -x
 fi
 
-logInfoMessage
-logErrorMessage
-logWarningMessage
-
 #CODEBASE_LOCATION="${WORKSPACE}"/"${CODEBASE_DIR}"
 logInfoMessage "I'll do processing at [$CODEBASE_LOCATION]"
 sleep  $SLEEP_DURATION
