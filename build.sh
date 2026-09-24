@@ -10,18 +10,12 @@ if [ "$DEBUG" = true ]; then
   set -x
 fi
 
-logInfoMessage "Current directory: $PWD"
-logInfoMessage "Workspace: $WORKSPACE"
-logInfoMessage "Codebase directory: $CODEBASE_DIR"
-
-#CODEBASE_LOCATION="${WORKSPACE}"/"${CODEBASE_DIR}"
+CODEBASE_LOCATION="${WORKSPACE}"/"${CODEBASE_DIR}"
 logInfoMessage "I'll do processing at [$CODEBASE_LOCATION]"
 sleep  $SLEEP_DURATION
 
-#cd  "${CODEBASE_LOCATION}"
 
 cd  "${CODEBASE_LOCATION}"
-
 TASK_STATUS=0
 
 DEPLOY_ENV_FILE="./deploy.env"
@@ -52,7 +46,7 @@ setupAwsCredentials() {
             logErrorMessage "AWS_PROFILE must be set when ASSUME_ROLE=false"
             exit 1
         fi
-
+        export AWS_PROFILE="${AWS_PROFILE}"
         # Get credentials from AWS profile
         export AWS_ACCESS_KEY_ID="$(aws configure get aws_access_key_id --profile "$AWS_PROFILE")"
         export AWS_SECRET_ACCESS_KEY="$(aws configure get aws_secret_access_key --profile "$AWS_PROFILE")"
@@ -97,11 +91,11 @@ setupAwsCredentials() {
     logInfoMessage "=== AWS credentials setup completed ==="
 }
 
-if [ -n "${ASSUME_ROLE:-}" ] || [ -n "${AWS_PROFILE:-}" ]; then
-        setupAwsCredentials
-    else
-        logWarningMessage "Neither ASSUME_ROLE nor AWS_PROFILE is set, skipping AWS credential setup"
-fi
+  if [[ "${ASSUME_ROLE:-false}" == "true" || -n "${AWS_PROFILE:-}" ]]; then
+      setupAwsCredentials
+  else
+      logInfoMessage "Neither ASSUME_ROLE=true nor AWS_PROFILE is set, skipping AWS credential setup"
+  fi
 
 
 if [ ! -f "$DEPLOY_ENV_FILE" ]; then
